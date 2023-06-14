@@ -33,18 +33,18 @@ parser.add_argument(
     help='ID essential.'
 )
 
-# Parametro - Lenguaje de entrada
+# Parametro - Languaje de entrada
 parser.add_argument(
-    '-lengI',
-    '--lenguage_input',
-    help='Lenguage import input'
+    '-langI',
+    '--language_input',
+    help='Language import input'
 )
 
-# Parametro - Lenguaje de salida
+# Parametro - Languaje de salida
 parser.add_argument(
-    '-lengO',
-    '--lenguage_output',
-    help='Lenguage export output'
+    '-langO',
+    '--language_output',
+    help='Language export output'
 )
 
 # Parametro - File output
@@ -88,34 +88,34 @@ def id_number():
     except:
         print('ERROR - The id is not float')
     
-# Evento - Parametro lenguage input
-def lenguage_input():
+# Evento - Parametro language input
+def language_input():
     try:
-        return args.lenguage_input
+        return args.language_input
     except:
-        print('ERROR - Select a input lenguage')
+        print('ERROR - Select a input language')
 
-# Evento - Parametro lenguage output
-def lenguage_output():
+# Evento - Parametro language output
+def language_output():
     try:
-        return(args.lenguage_output)
+        return(args.language_output)
     except:
-        print('ERROR - Select a output lenguage')
+        print('ERROR - Select a output language')
 
 
 # Texto a traducir
 def Translate_and_save():
     # Objeto - Traductor
     if (
-        lenguage_input() == None or
-        lenguage_output() == None
+        language_input() == None or
+        language_output() == None
     ):
-        # Si no existe los lenguages de input o output
-        print('ERROR - Lenguege input or output, not goods')
+        # Si no existe los languages de input o output
+        print('ERROR - Languege input or output, not goods')
     else:
         translator = GoogleTranslator(
-            source=lenguage_input(),
-            target=lenguage_output()
+            source=language_input(),
+            target=language_output()
         )
 
 
@@ -145,10 +145,10 @@ def Translate_and_save():
             # Mostrar texto original
             # Mostrar texto traducido
             print(
-                Title(lenguage_input(), see=False) +
+                Title(language_input(), see=False) +
                 text_file + '\n\n' +
 
-                Title(lenguage_output(), see=False) +
+                Title(language_output(), see=False) +
                 text_translate + '\n\n'+
                 
                 Separator(see=False)
