@@ -150,7 +150,6 @@ def Name(nme=''):
 
 def Path(pth='', sys=sys):
 #    pth = ''
-    CleanScreen()
     pth_fin = ''
     if sys == 'linux':
         pth_fin = '/'
@@ -176,7 +175,6 @@ def Path(pth='', sys=sys):
     else:        
         pth = pth + pth_fin
 
-    CleanScreen()
     return pth
     
 

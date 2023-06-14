@@ -26,13 +26,6 @@ parser.add_argument(
     help='String text'
 )
 
-# Parametro - ID
-parser.add_argument(
-    '-id',
-    '--id_number',
-    help='ID essential.'
-)
-
 # Parametro - Languaje de entrada
 parser.add_argument(
     '-langI',
@@ -57,6 +50,7 @@ parser.add_argument(
 # Argumentos listos, para hacer lo chido
 args = parser.parse_args()
 
+
 # Evento - Parametro file
 def input_text():
     try:
@@ -67,6 +61,7 @@ def input_text():
     except:
         pass
 
+
 # Evento - Parametro texto only
 def text_only():
     try:
@@ -74,19 +69,6 @@ def text_only():
     except:
         print('ERROR - Text not found')
 
-# Evento - Parametro id number
-def id_number():
-    try:
-        if (
-            type( float(args.id_number) ) is float
-        ):
-            # Si id_numeber no es flotante
-            return args.id_number
-        else:
-            # Si id_number no es un numero flotante
-            print('ERROR - The id is not float')
-    except:
-        print('ERROR - The id is not float')
     
 # Evento - Parametro language input
 def language_input():
@@ -130,12 +112,13 @@ def Translate_and_save():
     else:
         # Si existe el archivo.txt
         try:
+            # Leer archivo de texto
             text_file = Text_Read(
                 file_and_path=input_text(),
                 opc='ModeText'
             )
         except:
-            # Si no existe el archivo.txt
+            # ERROR - no es un archivo de texto.
             print('ERROR - This is not a text file')
 
         try:
