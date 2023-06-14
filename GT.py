@@ -1,4 +1,5 @@
 from Modulo_Util import (
+    Text_Read,
     CleanScreen,
     Path,
 )
@@ -34,14 +35,14 @@ def Translate():
     else:
         # Los languages, no son str, por lo tanto, no es nada
         translator = None
-        print('ERROR - Lenguage input or output, no detects')
+        #print('ERROR - Lenguage input or output, no detects')
 
     
     # Verificar que este listo el objeto para traducir texto
     if translator == None:
         # Si el translator no esta correcto.
         print(
-            'ERROR - Parameters, lang_input or lang_output'
+            'ERROR - Parameters, not goods'
         )
     else:
         # Empezar a traducir
