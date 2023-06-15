@@ -1,6 +1,5 @@
 import argparse
 from pathlib import Path as pathlib
-from Modulo_Util import System as sys
 from Modulo_GT import Translate
 
 
