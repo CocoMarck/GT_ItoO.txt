@@ -1,110 +1,159 @@
-import argparse
-from pathlib import Path as pathlib
-from Modulo_Util import System as sys
-
-
-# Objeto para los parametros
-parser = argparse.ArgumentParser()
-
-# Parametro - File
-parser.add_argument(
-    '-i',
-    '--input_text',
-    help='Text input'
+from Modulo_Util import (
+    Text_Read,
+    Path,
 )
-
-# Parametro - ID
-parser.add_argument(
-    '-id',
-    '--id_number',
-    help='Text ID'
+from Modulo_ShowPrint import (
+    Title,
+    Separator
 )
-
-# Parametro - Text Only
-parser.add_argument(
-    '-t',
-    '--text_only',
-    help='Text type String'
-)
-
-# Parametro - Languaje de entrada
-parser.add_argument(
-    '-li',
-    '--language_input',
-    help='Language import input'
-)
-
-# Parametro - Languaje de salida
-parser.add_argument(
-    '-lo',
-    '--language_output',
-    help='Language export output'
-)
-
-# Parametro - File output
-parser.add_argument(
-    '-o',
-    '--output_text',
-    help='Text Output'
-)
-
-# Argumentos listos, para hacer lo chido
-args = parser.parse_args()
+from deep_translator import GoogleTranslator
+import os
 
 
-# Evento - Parametro file
-def input_text():
-    try:
-        if pathlib(args.input_text).exists():
-            return args.input_text
-        else:
-            print('ERROR - This is not a file')
-    except:
-        pass
+def Translate(
+        language_input = None,
+        language_output = None,
+        input_text = None,
+        output_text = None,
+        text_only = None,
+        id_input = None,
+        id_output = None,
+        print_mode = True,
+    ):
+    # Alistar Objeto de Traduccion
+    if (
+        type ( language_input ) is str and
+        type ( language_output ) is str
+    ):
+        # Si los lengujes son str
+        try:
+            # Objeto Traducir
+            translator = GoogleTranslator(
+                source=language_input,
+                target=language_output
+            )
+        except:
+            # Parametros para objeto traducir, erroneos
+            translator = None
 
-
-# Evento - Parametro id
-def id_number():
-    try:
-        # Verificar que sea un numero
-        if float(args.id_number):
-            pass
-
-        # Alistar id_li.txt
-        return args.id_number
-
-    except:
-        pass
-        #print('ERROR - This is not a number')
-
-def id_input():
-    try:
-        return f'{id_number()}_{language_input()}.txt'
-    except:
-        pass
-
-def id_output():
-    try:
-        return f'{id_number()}_{language_output()}.txt'
-    except:
-        pass
-
-
-# Evento - Parametro texto only
-def text_only():
-    return args.text_only
+    else:
+        # Los languages, no son str, por lo tanto, no es nada
+        translator = None
+        #print('ERROR - Lenguage input or output, no detects')
 
     
-# Evento - Parametro language input
-def language_input():
-    return args.language_input
+    # Verificar que este listo el objeto para traducir texto
+    if translator == None:
+        # Si el translator no esta correcto.
+        print(
+            'ERROR - Parameters, not goods'
+        )
+    else:
+        # Empezar a traducir
+        if type( input_text ) is str:
+            # Si el input_text es un archivo de texto
+            try:
+                # Traducir input_text
+                to_translate = Text_Read(
+                    file_and_path=input_text,
+                    opc='ModeText'
+                )
+            except:
+                # El input no es un texto.
+                to_translate = None
+                if os.path.isdir( input_text ):
+                    # El input es un directorio
+                    try:
+                        # Traducir id
+                        to_translate = Text_Read(
+                            file_and_path=(
+                                Path(input_text) +
+                                id_input
+                            ),
+                            opc='ModeText'
+                        )
+                    except:
+                        # No traducir
+                        pass
+                else:
+                    # No traducir
+                    pass
 
+        else:
+            to_translate = None
+            
+            try:
+                # ID Traducir
+                to_translate = Text_Read(
+                    file_and_path=id_input,
+                    opc='ModeText'
+                )
+                #output_text = id_output
+            except:
+                # ID No traducir
+                pass
+            
+            if type( text_only ) is str:
+                # --text_only, Traducrir un str
+                to_translate = text_only
+        
 
-# Evento - Parametro language output
-def language_output():
-    return(args.language_output)
+        # Ralizar eventos, de imprimir y/o guardar archivos
+        if type( to_translate ) is str:
+            # Traduccion hecha
+            translate_ready = translator.translate( to_translate )
 
+            # Imprimir o no el texto i y o.
+            if print_mode == True:
+                if type (text_only) is str:
+                    # -t, Si exite el modo solo texto
+                    pass
+                else:
+                    # De lo contrario, mostrar -li y -lo
+                    Title(text=language_input)
+                    print(to_translate)
+                    Separator()
+                    Title(text=language_output)
+                print(translate_ready)
+            else:
+                pass
+            
+            # Zona del output
+            try:
+                if type( output_text ) is str:
+                    if os.path.isdir( output_text ):
+                        # Para el ID, Modo ID y dir
+                        output_text = Path(output_text) + id_output
 
-# Texto a traducir
-def output_text():
-    return args.output_text
+                    else:
+                        # Traduccion Modo Normal
+                        output_text = output_text
+
+                else:
+                    # Para el ID, Modo ID sin dir
+                    if type( id_output ) is str:
+                        output_text = id_output
+                    else:
+                        output_text = None
+
+                if type (output_text) is str:
+                    # Meter traduccion al output
+                    with open(output_text, 'w') as text_output:
+                        text_output.write(translate_ready)
+
+                    if print_mode == True:
+                        Separator()
+                        print('Text Saved')
+                    else:
+                        pass
+                else:
+                    pass
+
+            except:
+                Separator()
+                print('ERROR - Output, not good')
+            
+            return translate_ready
+
+        else:
+            print('ERROR - Translating')
