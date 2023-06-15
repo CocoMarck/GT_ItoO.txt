@@ -70,10 +70,15 @@ def Translate():
         if type( to_translate ) is str:
             translate_ready = translator.translate( to_translate )
 
-            Title(text=language_input())
-            print(to_translate)
-            Separator()
-            Title(text=language_output())
+            if type (text_only()) is str:
+                # -t, Si exite el modo solo texto
+                pass
+            else:
+                # De lo contrario, mostrar -li y -lo
+                Title(text=language_input())
+                print(to_translate)
+                Separator()
+                Title(text=language_output())
             print(translate_ready)
             
             try:

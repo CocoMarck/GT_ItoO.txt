@@ -136,10 +136,8 @@ def Separator(
     print_mode = bool
     # Mostrar con print o no.
     '''
-    separator = f'\n{smb*smb_number}\n'
+    separator = f'\n\n{smb*smb_number}\n\n'
     if print_mode == True:
         print(separator)
     else:
-        separator = f'\n{separator}\n'
-
-    return  separator
+        return separator
