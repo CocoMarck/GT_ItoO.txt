@@ -19,3 +19,31 @@ echo .\GT_ID.exe -id 10 -li es -lo en
 
 .\GT_ID.exe -id 10 -li es -lo en
 pause
+
+
+cls
+echo .\GT_ID.exe -t "Texto necesario" -li es -lo en
+
+.\GT_ID.exe -t "Texto necesario" -li es -lo en
+pause
+
+
+cls
+echo .\GT_ID.exe -t "Texto necesario" -li es -lo en -o .\OnlyText_en.txt
+
+.\GT_ID.exe -t "Texto necesario" -li es -lo en -o .\OnlyText_en.txt
+pause
+
+
+cls
+echo .\GT_ID.exe -i .\Texto_es.txt -li es -lo en
+
+.\GT_ID.exe -i .\Texto_es.txt -li es -lo en
+pause
+
+
+cls
+echo .\GT_ID.exe -i .\Texto_es.txt -li es -lo en -o .\Text_en.txt
+
+.\GT_ID.exe -i .\Texto_es.txt -li es -lo en -o .\Text_en.txt
+pause
