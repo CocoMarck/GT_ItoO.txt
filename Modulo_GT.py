@@ -1,4 +1,4 @@
-import argparse, os
+import argparse
 from pathlib import Path as pathlib
 from Modulo_Util import System as sys
 
@@ -71,11 +71,23 @@ def id_number():
             pass
 
         # Alistar id_li.txt
-        return f'{args.id_number}_{args.language_input}.txt'
+        return args.id_number
 
     except:
         pass
         #print('ERROR - This is not a number')
+
+def id_input():
+    try:
+        return f'{id_number()}_{language_input()}.txt'
+    except:
+        pass
+
+def id_output():
+    try:
+        return f'{id_number()}_{language_output()}.txt'
+    except:
+        pass
 
 
 # Evento - Parametro texto only
@@ -94,5 +106,5 @@ def language_output():
 
 
 # Texto a traducir
-def output_text():   
+def output_text():
     return args.output_text
