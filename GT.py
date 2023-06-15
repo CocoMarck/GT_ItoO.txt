@@ -1,8 +1,3 @@
-from Modulo_Util import (
-    Text_Read,
-    CleanScreen,
-    Path,
-)
 from Modulo_GT import (
     input_text,
     id_number,
@@ -10,6 +5,14 @@ from Modulo_GT import (
     language_input,
     language_output,
     output_text
+)
+from Modulo_Util import (
+    Text_Read,
+    Path,
+)
+from Modulo_ShowPrint import (
+    Title,
+    Separator
 )
 from deep_translator import GoogleTranslator
 import os
@@ -66,10 +69,12 @@ def Translate():
         # Ralizar eventos, de imprimir y/o guardar archivos
         if type( to_translate ) is str:
             translate_ready = translator.translate( to_translate )
-            print(
-                to_translate + '\n\n' +
-                translate_ready
-            )
+
+            Title(text=language_input())
+            print(to_translate)
+            Separator()
+            Title(text=language_output())
+            print(translate_ready)
             
             try:
                 if type( output_text() ) is str:
@@ -80,13 +85,17 @@ def Translate():
                         # Meter Traduccion al output.
                         with open(output_text(), 'w') as text_output:
                             text_output.write(translate_ready)
+                    
+                    Separator()
                     print('Text Saved')
                 else:
                     pass
             except:
+                Separator()
                 print('ERROR - Output, not good')
 
         else:
+            Separator()
             print('ERROR - Translating')
 
 
