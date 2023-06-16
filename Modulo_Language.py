@@ -28,7 +28,7 @@ def Language( lang=Default_Language() ):
         text_separe='='
     )
     
-    # Verificar un language establecido por el usuario
+    # Verificar un language establecido por el archivo - usuario
     if file_dict['set_lang'] == '':
         # Si no hay str, entonces se coloca el default
         pass
@@ -41,8 +41,8 @@ def Language( lang=Default_Language() ):
         lang = file_dict['set_lang']
 
     else:
-        # Si es incorrecto, entonces se coloca el default
-        pass
+        # Si es incorrecto, entonces se coloca english
+        lang = 'en'
 
     # Verificar que el lang sea español o english
     if (
@@ -51,8 +51,8 @@ def Language( lang=Default_Language() ):
     ):
         pass
     else:
-        # Si no es español o english, entonces.
-        print(lang)
+        # Si no es español o english, entonces sera enlgish.
+        #print(lang)
         lang = 'en'
     
     # Agregar str de languages a un dicionario
@@ -70,15 +70,45 @@ def Language( lang=Default_Language() ):
 
         # Agregar al diccionario
         lang_dict = {
-            'title': file_dict[f'{lang}title'],
+            # Opciones
             'option': file_dict[f'{lang}option'],
-            'lang': file_dict[f'{lang}lang'],
             'exit': file_dict[f'{lang}exit'],
-            'bye': file_dict[f'{lang}bye'],
             'continue': file_dict[f'{lang}continue'],
             'continue_enter': file_dict[f'{lang}continue_enter'],
+            'install': file_dict[f'{lang}install'],
+            'select': file_dict[f'{lang}select'],
             'YesNo': list_YesNo,
-            'app': file_dict[f'{lang}app']
+            'more_info': file_dict[f'{lang}more_info'],
+            'set_dir': file_dict[f'{lang}set_dir'],
+            
+            # Finalizando - Completando
+            'finalized': file_dict[f'{lang}finalized'],
+            'bye': file_dict[f'{lang}bye'],
+            'fin_install': file_dict[f'{lang}fin_install'],
+            
+            # Errores
+            'error_admin': file_dict[f'{lang}error_admin'],
+            'error_dir': file_dict[f'{lang}error_dir'],
+            'error_parameter': file_dict[f'{lang}error_parameter'],
+            
+            # Ayuda
+            'help_wait': file_dict[f'{lang}help_wait'],
+            
+            # Solo texto
+            'app': file_dict[f'{lang}app'],
+            'title': file_dict[f'{lang}title'],
+            'lang': file_dict[f'{lang}lang'],
+            'dir': file_dict[f'{lang}dir'],
+            'ver': file_dict[f'{lang}ver'],
+            'name': file_dict[f'{lang}name'],
+            'exec': file_dict[f'{lang}exec'],
+            'icon': file_dict[f'{lang}icon'],
+            'comment': file_dict[f'{lang}comment'],
+            'terminal': file_dict[f'{lang}terminal'],
+            'categories': file_dict[f'{lang}categories'],
+            'wait': file_dict[f'{lang}wait'],
+            'text': file_dict[f'{lang}text'],
+            'cmd': file_dict[f'{lang}cmd']
         }
     else:
         pass
