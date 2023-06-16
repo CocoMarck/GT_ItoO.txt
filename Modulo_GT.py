@@ -1,11 +1,13 @@
 from Modulo_Util import (
     Text_Read,
     Path,
-)
-from Modulo_ShowPrint import (
     Title,
     Separator
 )
+#from Modulo_ShowPrint import (
+#    Title,
+#    Separator
+#)
 from deep_translator import GoogleTranslator
 import os
 
