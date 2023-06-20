@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path as pathlib
-from Modulo_GT import Translate
+from Modulos.Modulo_GT import Translate
 
 
 # Objeto para los parametros
