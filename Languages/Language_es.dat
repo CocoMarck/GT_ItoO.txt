@@ -101,3 +101,13 @@ comment=Comentario
 terminal=Terminal
 categories=Categorias
 wait=Esperar
+
+
+
+trs=Traductor
+trs_file=Traductor de archivos
+trs_txt=Traductor de texto
+set_txt=Establecer texto
+i=Entrada
+o=Salida
+save-or-no_trs=¿Guardar Traducción?

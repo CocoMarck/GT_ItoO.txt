@@ -104,3 +104,14 @@ terminal=Terminal
 categories=Categories
 wait=Wait
 install=Install
+
+
+
+trs=Translator
+trs_file=File Translator
+trs_txt=Text Translator
+set_txt=Set Text
+
+i=Input
+o=Output
+save-or-no_trs=Save Translation?
