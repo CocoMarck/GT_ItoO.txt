@@ -179,7 +179,7 @@ class Window_Main(Gtk.Window):
 
                     self.save_translate = True
                     self.thread = threading.Thread(
-                        target=self.thread_translate()
+                        target=self.thread_translate
                     )
                     self.thread.start()
                     
@@ -201,7 +201,7 @@ class Window_Main(Gtk.Window):
 
                 self.save_translate = False
                 self.thread = threading.Thread(
-                    target=self.thread_translate()
+                    target=self.thread_translate
                 )
                 self.thread.start()
                 
@@ -253,15 +253,12 @@ class Window_Main(Gtk.Window):
             pass
         
         # Fin - Mostrar texto traducido
-        if self.save_translate == False:
-            dialog = Util_Gtk.Dialog_TextView(
-                self,
-                text=self.text_translate
-            )
-            dialog.run()
-            dialog.destroy()
-        else:
-            pass
+        dialog = Util_Gtk.Dialog_TextView(
+            self,
+            text=self.text_translate
+        )
+        dialog.run()
+        dialog.destroy()
 
 
 win = Window_Main()
