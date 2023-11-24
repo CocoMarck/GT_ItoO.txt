@@ -1,4 +1,6 @@
 from os.path import isfile
+from Modulos.Modulo_GT import Translate
+import threading
 from Modulos.Modulo_Text import (
     Text_Read
 )
@@ -6,12 +8,12 @@ from Modulos.Modulo_Language import (
     get_text as Lang,
     Default_Language
 )
-from Modulos.Modulo_GT import Translate
+from Interface import Modulo_Util_Gtk as Util_Gtk
 
 import gi
 
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 
 
 class Window_Main(Gtk.Window):
@@ -116,56 +118,150 @@ class Window_Main(Gtk.Window):
     
     def evt_start_translate(self, widget):
         # Verificar que los parametros esten correctos
-        save = True
+        text_error = ''
         
         buffer_text_view = self.text_view.get_buffer()
-        text_input = buffer_text_view.get_text(
+        self.text_input = buffer_text_view.get_text(
             buffer_text_view.get_start_iter(),
             buffer_text_view.get_end_iter(),
             False
         )
-        if text_input == '':
-            print(f'ERROR - {Lang("text")}')
-            save = False
+        if self.text_input == '':
+            text_error += f'ERROR - {Lang("text")}\n'
         
         if self.entry_i_lang.get_text() == '':
-            print(f'ERROR - {Lang("lang")} | {Lang("i")}')
-            save = False
+            text_error += f'ERROR - {Lang("lang")} | {Lang("i")}\n'
             
         if self.entry_o_lang.get_text() == '':
-            print(f'ERROR - {Lang("lang")} | {Lang("o")}')
-            save = False
+            text_error += f'ERROR - {Lang("lang")} | {Lang("o")}\n'
         
-        # Fin - Traducir
-        if save == True:
-            print(Lang('finalized'))
-            
-            dialog = Gtk.FileChooserDialog(
-                title=Lang('save_arch'), parent=self,
-                action=Gtk.FileChooserAction.SAVE
+        
+        # Fin - Traducir o no
+        if text_error == '':
+            # Preguntar si guardar traduccion o no.
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.QUESTION,
+                buttons=Gtk.ButtonsType.YES_NO,
+                text=Lang('save-or-no_trs')
             )
-            dialog.add_buttons(
-                Gtk.STOCK_CANCEL,
-                Gtk.ResponseType.CANCEL,
-                Gtk.STOCK_SAVE,
-                Gtk.ResponseType.OK
-            )
-            dialog.set_current_name( f"{Lang('name')}.txt" )
-
-            filter_txt = Gtk.FileFilter()
-            filter_txt.set_name( Lang('text') )
-            filter_txt.add_mime_type('text/plain')
-            dialog.add_filter(filter_txt)
-            
             response = dialog.run()
-            if response == Gtk.ResponseType.OK:
-                print( dialog.get_filename() )
-            elif response == Gtk.ResponseType.CANCEL:
-                pass
+
+            # Traducir mediante un hilo
+            if response == Gtk.ResponseType.YES:
+                dialog.destroy()
+
+                dialog = Gtk.FileChooserDialog(
+                    title=Lang('save_arch'), parent=self,
+                    action=Gtk.FileChooserAction.SAVE
+                )
+                dialog.add_buttons(
+                    Gtk.STOCK_CANCEL,
+                    Gtk.ResponseType.CANCEL,
+                    Gtk.STOCK_SAVE,
+                    Gtk.ResponseType.OK
+                )
+                dialog.set_current_name( f"{Lang('name')}.txt" )
+
+                filter_txt = Gtk.FileFilter()
+                filter_txt.set_name( Lang('text') )
+                filter_txt.add_mime_type('text/plain')
+                dialog.add_filter(filter_txt)
+                
+                response = dialog.run()
+                if response == Gtk.ResponseType.OK:
+                    self.text_output = dialog.get_filename()
+
+                    self.dialog_wait = Util_Gtk.Dialog_Wait(
+                        self, text=Lang('wait')
+                    )
+
+                    self.save_translate = True
+                    self.thread = threading.Thread(
+                        target=self.thread_translate()
+                    )
+                    self.thread.start()
+                    
+                    self.dialog_wait.run()
+                    
+                elif response == Gtk.ResponseType.CANCEL:
+                    pass
+                
+                dialog.destroy()
+
+            elif response == Gtk.ResponseType.NO:
+                dialog.destroy()
+
+                self.text_output = self.text_input
+
+                self.dialog_wait = Util_Gtk.Dialog_Wait(
+                    self, text=Lang('wait')
+                )
+
+                self.save_translate = False
+                self.thread = threading.Thread(
+                    target=self.thread_translate()
+                )
+                self.thread.start()
+                
+                self.dialog_wait.run()
             
             dialog.destroy()
-            
-            print(text_input)
+
+        else:
+            # Error en alguno de los parametros
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text=text_error
+            )
+            dialog.run()
+            dialog.destroy()
+    
+    def thread_translate(self):
+        if self.save_translate == True:
+            pass
+        else:
+            self.text_output = None
+
+        #print(
+        #    f'{self.entry_i_lang.get_text()}\n'
+        #    f'{self.entry_o_lang.get_text()}\n'
+        #    f'{self.text_input}\n'
+        #    f'{self.text_output}'
+        #)
+        self.text_translate = Translate(
+            language_input = self.entry_i_lang.get_text(),
+            language_output = self.entry_o_lang.get_text(),
+            output_text = self.text_output,
+            text_only = self.text_input,
+            print_mode = False
+        )
+        
+        GLib.idle_add(self.thread_translate_finish)
+    
+    def thread_translate_finish(self):
+        self.dialog_wait.destroy()
+        
+        # Si la traducción falla, se mostrara remplazara la variable que contendira la traducción, por un mensaje de error
+        if self.text_translate == None:
+            self.text_translate = f"ERROR - {Lang('error_parameter')}"
+        else:
+            pass
+        
+        # Fin - Mostrar texto traducido
+        if self.save_translate == False:
+            dialog = Util_Gtk.Dialog_TextView(
+                self,
+                text=self.text_translate
+            )
+            dialog.run()
+            dialog.destroy()
+        else:
+            pass
 
 
 win = Window_Main()
