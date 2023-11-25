@@ -140,19 +140,54 @@ class Window_Main(QWidget):
             )
             if message_quest == QMessageBox.StandardButton.Yes:
                 self.save_translate = True
-                print(self.text_input)
+                self.text_output, ok = QFileDialog.getSaveFileName(
+                    self,
+                    '',
+                    self.entry_i_dir.text(),
+                    f'{Lang("text")} (*.txt)'
+                )
+                if self.text_output:
+                    self.text_output = str( Path(self.text_output) )
+                else:
+                    self.text_output = None
             
             else:
                 self.save_translate = False
-                print(self.text_input)
+                self.text_output = None
+                
+            self.dialog_wait = Util_Qt.Dialog_Wait(
+                self,
+                text=Lang('help_wait')
+            )
+            self.dialog_wait.show()
+            
+            self.thread_translate = Thread_translate(
+                i_lang=self.entry_i_lang.text(),
+                o_lang=self.entry_o_lang.text(),
+                i_text=self.text_input,
+                o_text=self.text_output,
+                save_translate=self.save_translate
+            )
+            self.thread_translate.finished.connect( self.translate_fin )
+            self.thread_translate.start()
 
         else:
             # Error en alguno de los parametros
             QMessageBox.critical(
                 self,
-                'ERROR',
+                '',
                 text_error
             )
+    
+    def translate_fin(self):
+        Util_Qt.Dialog_TextEdit(
+            self,
+            text = self.thread_translate.text_translate
+        ).exec()
+        
+        self.dialog_wait.close()
+        self.dialog_wait = None
+        self.thread_translate = None
 
 
 class Thread_translate(QThread):
@@ -163,21 +198,29 @@ class Thread_translate(QThread):
         o_lang=None,
         i_text=None,
         o_text=None,
+        save_translate=None,
     ):
         super().__init__()
         self._i_lang = i_lang
         self._o_lang = o_lang
         self._i_text = i_text
-        self._o_text = o_text
+        
+        if save_translate == True:
+            self._o_text = o_text
+        else:
+            self._o_text = None
     
     def run(self):
         self.text_translate = Translate(
-            language_input = self.i_lang,
-            language_output = self.o_lang,
-            output_text = self.o_text,
-            text_only = self.i_text,
+            language_input = self._i_lang,
+            language_output = self._o_lang,
+            output_text = self._o_text,
+            text_only = self._i_text,
             print_mode = False
         )
+        
+        if self.text_translate == None:
+           self.text_translate = f'ERROR - {Lang("error_parameter")}'
     
         self.finished.emit(self.text_translate)
 
