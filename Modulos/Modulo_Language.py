@@ -1,22 +1,23 @@
 import locale
 from pathlib import Path as pathlib
-from .Modulo_Text import (
+from Modulos.Modulo_Text import (
     Text_Read,
     Ignore_Comment,
     Text_Separe
 )
-from .Modulo_Files import(
+from Modulos.Modulo_Files import(
     Files_List
 )
 
 
 lang_dir = 'Languages/'
+locale.setlocale(locale.LC_ALL, '')
 
 
 def Default_Language():
     # Obtener lista de languaje default del OS y establecer el lang
     lang_default = locale.getlocale()
-    lang_default = lang_default[0]
+    lang_default = str(lang_default[0])
 
     # Separar el el texto por _ y establecer el texto de la izq
     lang_default = lang_default.split('_')
