@@ -1,4 +1,4 @@
-from Modulos.Modulo_GT import Translate
+from Modulos.Modulo_GT import Translate, list_lang
 from Modulos.Modulo_Text import (
     Text_Read
 )
@@ -19,7 +19,8 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QLabel,
     QVBoxLayout,
-    QHBoxLayout
+    QHBoxLayout,
+    QCompleter
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QIcon
@@ -30,7 +31,7 @@ class Window_Main(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.setWindowTitle( Lang('trs') )
+        self.setWindowTitle( f"{Lang('trs')} - @CocoMarck GitHub" )
         self.resize(512, -1)
         
         # Contenedor Principal
@@ -73,8 +74,9 @@ class Window_Main(QWidget):
             self,
             maxLength=-1,
             text=str(Default_Language()),
-            placeholderText=Lang('i')
+            placeholderText=Lang('i'),
         )
+        self.entry_i_lang.setCompleter( QCompleter(list_lang) )
         hbox.addWidget(self.entry_i_lang)
         
         self.entry_o_lang = QLineEdit(
@@ -83,6 +85,7 @@ class Window_Main(QWidget):
             text='',
             placeholderText=Lang('o')
         )
+        self.entry_o_lang.setCompleter( QCompleter(list_lang) )
         hbox.addWidget(self.entry_o_lang)
         
         # Sección Vertical - Iniciar Traducción
@@ -180,13 +183,14 @@ class Window_Main(QWidget):
             )
     
     def translate_fin(self):
+        self.dialog_wait.close()
+        self.dialog_wait = None
+        
         Util_Qt.Dialog_TextEdit(
             self,
             text = self.thread_translate.text_translate
         ).exec()
         
-        self.dialog_wait.close()
-        self.dialog_wait = None
         self.thread_translate = None
 
 

@@ -1,5 +1,5 @@
 from os.path import isfile
-from Modulos.Modulo_GT import Translate
+from Modulos.Modulo_GT import Translate, list_lang
 import threading
 from Modulos.Modulo_Text import (
     Text_Read
@@ -18,7 +18,7 @@ from gi.repository import Gtk, GLib
 
 class Window_Main(Gtk.Window):
     def __init__(self):
-        super().__init__( title=Lang("trs") )
+        super().__init__( title=f"{Lang('trs')} - @CocoMarck GitHub" )
         self.set_resizable(True)
         self.set_default_size(308, -1)
         
@@ -62,12 +62,24 @@ class Window_Main(Gtk.Window):
             text=str(Default_Language()),
             placeholder_text=Lang('i')
         )
+        completion = Gtk.EntryCompletion()
+        completion.set_model( Gtk.ListStore(str) )
+        for lang in list_lang:
+            completion.get_model().append( [lang] )
+        completion.set_text_column(0)
+        self.entry_i_lang.set_completion(completion)
         hbox.pack_start(self.entry_i_lang, True, True, 0)
         
         self.entry_o_lang = Gtk.Entry(
             text='',
             placeholder_text=Lang('o')
         )
+        completion = Gtk.EntryCompletion()
+        completion.set_model( Gtk.ListStore(str) )
+        for lang in list_lang:
+            completion.get_model().append( [lang] )
+        completion.set_text_column(0)
+        self.entry_o_lang.set_completion(completion)
         hbox.pack_start(self.entry_o_lang, True, True, 0)
         
         # Seccion vertical - Iniciar traducción
