@@ -53,7 +53,7 @@ class Window_Main(QWidget):
         button_i_dir.clicked.connect(self.evt_set_input_dir)
         hbox.addWidget(button_i_dir)
         
-        vbox_main.addStretch()
+        #vbox_main.addStretch()
         
         # Sección Vertical - Texto en un Text Edit
         self.text_edit = QTextEdit(
@@ -89,7 +89,7 @@ class Window_Main(QWidget):
         hbox.addWidget(self.entry_o_lang)
         
         # Sección Vertical - Iniciar Traducción
-        vbox_main.addStretch()
+        #vbox_main.addStretch()
         
         button_start_translate = QPushButton( f'{Lang("start")} | {Lang("trs")}' )
         button_start_translate.clicked.connect(self.evt_start_translate)

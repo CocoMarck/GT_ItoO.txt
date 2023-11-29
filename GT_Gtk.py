@@ -28,7 +28,7 @@ class Window_Main(Gtk.Window):
         
         # Sección Vertical - Establecer archivo de texto
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
-        vbox_main.pack_start(hbox, True, False, 0)
+        vbox_main.pack_start(hbox, False, False, 0)
 
         self.entry_i_dir = Gtk.Entry(
             placeholder_text=Lang('arch')
@@ -53,7 +53,7 @@ class Window_Main(Gtk.Window):
         
         # Sección Vertical - Establecer Language input y output
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
-        vbox_main.pack_start(hbox, True, False, 0)
+        vbox_main.pack_start(hbox, False, False, 0)
         
         label = Gtk.Label(label=f'{Lang("lang")}: ')
         hbox.pack_start(label, False, True, 8)
@@ -87,7 +87,7 @@ class Window_Main(Gtk.Window):
             label = Lang('start')
         )
         button_start_translate.connect('clicked', self.evt_start_translate)
-        vbox_main.pack_start(button_start_translate, True, False, 8)
+        vbox_main.pack_end(button_start_translate, False, False, 8)
         
         # Fin - Agregar contenedor principal
         self.add(vbox_main)
