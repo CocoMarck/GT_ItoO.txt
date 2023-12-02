@@ -101,6 +101,22 @@ class Translator:
             Title( Lang('text') )
             text = input(f'{Lang("text")}: ')    
         
+        # Parte Visual - Gueardar texto
+        CleanScreen()
+        Title( Lang('trs_file') )
+        save = Continue(Lang('save-or-no_trs'))
+        if save == YesNo('yes'):
+            CleanScreen()
+            save = Archive_Path()
+            CleanScreen()
+            input(
+                save + '\n'
+                f"{Lang('continue_enter')}..."
+            )
+            
+        else:
+            save = None
+        
 
         # Verificar que los parametros esten bien...
         text_error = ''
@@ -115,13 +131,16 @@ class Translator:
 
         if text_error == '':       
             # Iniciar traducción.
-            text_translate = Translate(
-                language_input = i_lang,
-                language_output = o_lang,
-                output_text = None,
-                text_only = text,
-                print_mode = False
-            )
+            try:
+                text_translate = Translate(
+                    language_input = i_lang,
+                    language_output = o_lang,
+                    output_text = save,
+                    text_only = text,
+                    print_mode = False
+                )
+            except:
+                text_translate = Lang('error_parameter')
             
             CleanScreen()
             Title( Lang('trs') )
