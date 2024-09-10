@@ -1,13 +1,13 @@
-from Modulos.Modulo_GT import Translate, list_lang
-from Modulos.Modulo_System import CleanScreen
-from Modulos.Modulo_Text import Text_Read
-from Modulos.Modulo_ShowPrint import (
+from logic.Modulo_GT import Translate, list_lang
+from logic.Modulo_System import CleanScreen
+from logic.Modulo_Text import Text_Read
+from interface.Modulo_ShowPrint import (
     Title,
     Continue,
     Separator,
     Archive_Path
 )
-from Modulos.Modulo_Language import (
+from data.Modulo_Language import (
     get_text as Lang,
     Default_Language,
     YesNo
@@ -101,7 +101,7 @@ class Translator:
             Title( Lang('text') )
             text = input(f'{Lang("text")}: ')    
         
-        # Parte Visual - Gueardar texto
+        # Parte Visual - Guardar texto
         CleanScreen()
         Title( Lang('trs_file') )
         save = Continue(Lang('save-or-no_trs'))

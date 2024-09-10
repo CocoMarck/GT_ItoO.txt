@@ -1,13 +1,13 @@
-from Modulos.Modulo_GT import Translate, list_lang
-from Modulos.Modulo_Text import (
+from logic.Modulo_GT import Translate, list_lang
+from logic.Modulo_Text import (
     Text_Read
 )
-from Modulos.Modulo_Language import (
+from data.Modulo_Language import (
     get_text as Lang,
     Default_Language
 )
 
-from Interface import Modulo_Util_Qt as Util_Qt
+from interface import Modulo_Util_Qt as Util_Qt
 import sys
 from PyQt6.QtWidgets import (
     QApplication,
